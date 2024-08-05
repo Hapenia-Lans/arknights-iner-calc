@@ -1,19 +1,21 @@
 # 明日方舟【宝石铭刻】计算器
 
-## 运行
-
-### Windows
-
-可以下载预制品.
-
-### MacOS / Linux
+## 安装与运行
 
 需要 Rust 环境，安装方法见 https://www.rust-lang.org/zh-CN/tools/.
+
+在有 Rust 环境的电脑中：
+
+```
+cargo install iner-calc
+```
+
+即可安装。
 
 ## 使用方式
 
 ```
-Usage: iner-calc.exe <BOARD_SIZE> <NESRE> <PET> <GABE> <SHAY>
+Usage: iner-calc <BOARD_SIZE> <NESRE> <PET> <GABE> <SHAY>
 
 Arguments:
   <BOARD_SIZE>  解锁的操作台数量
