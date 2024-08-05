@@ -2,7 +2,7 @@
 
 ## 安装与运行
 
-需要 Rust 环境，安装方法见 https://www.rust-lang.org/zh-CN/tools/.
+需要 Rust 环境，安装方法见 https://www.rust-lang.org/zh-CN/tools/install.
 
 在有 Rust 环境的电脑中：
 
