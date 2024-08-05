@@ -39,8 +39,6 @@ Options:
 
 ## 运行方式
 
-运行 `cargo run --release`. **不使用 `--release` 大约会带来 10x 的额外时间开销。因此请务必使用 `cargo run --release` 运行。**
-
 本计算器使用 [Rayon](https://github.com/rayon-rs/rayon) 进行并行化计算，计算过程**将占用您所有的CPU核心，对于CPU运算能力较弱的电脑来说，运行时或许会造成电脑卡顿或风扇高速运转，属于正常现象**。
 
 ### 运行结果解读
