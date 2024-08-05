@@ -1,13 +1,8 @@
 use factorial::Factorial;
-
 use rayon::iter::{ParallelBridge, ParallelIterator};
-
 use std::sync::{Arc, Mutex, RwLock};
-
 use std::thread;
-
 use std::time::Duration;
-
 use std::{cell::RefCell, collections::HashMap, vec};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
