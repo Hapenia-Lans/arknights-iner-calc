@@ -14,6 +14,8 @@ cargo install iner-calc
 
 ## 使用方式
 
+这是命令行工具。使用方式见下面的描述：
+
 ```
 Usage: iner-calc <BOARD_SIZE> <NESRE> <PET> <GABE> <SHAY>
 
@@ -29,11 +31,11 @@ Options:
   -V, --version  Print version
 ```
 
-### 编译运行
 
 ## 命名
 
 ![各类伊纳对应的名称](/readmefiles/image.png)
+
 
 ## 运行方式
 
@@ -43,18 +45,20 @@ Options:
 
 ### 运行结果解读
 
+下面是一个示例数据：
+
 ```
+>>> iner-calc 6 10 70 10 10
 [000.00%]: 0000000 of 3628800, 0.00k iter/s
-[012.76%]: 0462885 of 3628800, 3240.20k iter/s
-[025.12%]: 0911438 of 3628800, 3139.87k iter/s
-[036.22%]: 1314258 of 3628800, 2819.74k iter/s
-[048.33%]: 1753824 of 3628800, 3076.96k iter/s
-[060.25%]: 2186405 of 3628800, 3028.07k iter/s
-[074.88%]: 2717402 of 3628800, 3716.98k iter/s
-[089.91%]: 3262560 of 3628800, 3816.11k iter/s
-[100.00%]: 3628800 of 3628800, 2563.68k iter/s
+[014.38%]: 0521927 of 3628800, 3653.49k iter/s
+[028.75%]: 1043234 of 3628800, 3649.15k iter/s
+[043.90%]: 1592869 of 3628800, 3847.45k iter/s
+[058.30%]: 2115732 of 3628800, 3660.04k iter/s
+[073.33%]: 2661023 of 3628800, 3817.04k iter/s
+[088.36%]: 3206576 of 3628800, 3818.87k iter/s
+[100.00%]: 3628800 of 3628800, 2955.57k iter/s
 ======== CALCULATION FINISHED ========
-Score: 176485
+Score: 87015
 Board: [Some(FilterI), Some(MingleII), Some(CrystalI), Some(CrystalII), Some(CrystalIII), Some(MingleI)]
 Technique: [ExtractI, ExtractII, ExtractIII, ExtractIV, FilterII, FilterIII, MingleIII]
 ```
@@ -62,3 +66,7 @@ Technique: [ExtractI, ExtractII, ExtractIII, ExtractIV, FilterII, FilterIII, Min
 - `Score`: 本次能够获得的最高分数；
 - `Board`: 操作台上从左到右依次应当放置的工艺，`Some(X)` 表示应该放置，`None`表示应该空置；
 - `Technique`：剩余在场下的工艺。
+- `ExtractN`: 萃雕工艺（火焰伊纳线，`N`代表`I/II/III/IV`）
+- `FilterN`: 滤纯工艺（草伊纳线，`N`代表`I/II/III`）
+- `MingleN`: 交糅工艺（天空伊纳线，`N`代表`I/II/III`）
+- `CrystalN`: 落晶工艺（沙伊纳线，`N`代表`I/II/III`）
