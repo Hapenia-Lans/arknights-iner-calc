@@ -13,15 +13,15 @@ use std::{cell::RefCell, collections::HashMap, vec};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Iner {
     /// 火焰伊纳
-    Nerse,
+    Nesre,
     /// 火焰伊纳 I
-    NerseI,
+    NesreI,
     /// 火焰伊纳 II
-    NerseII,
+    NesreII,
     // 火焰伊纳 III
-    NerseIII,
+    NesreIII,
     /// 火焰伊纳 IV
-    NerseIV,
+    NesreIV,
     /// 天空伊纳
     Pet,
     /// 天空伊纳 I
@@ -46,11 +46,11 @@ impl Iner {
     /// 伊纳基础分数
     pub const fn base_score(&self) -> usize {
         match self {
-            Iner::Nerse => 1,
-            Iner::NerseI => 2,
-            Iner::NerseII => 10,
-            Iner::NerseIII => 35,
-            Iner::NerseIV => 85,
+            Iner::Nesre => 1,
+            Iner::NesreI => 2,
+            Iner::NesreII => 10,
+            Iner::NesreIII => 35,
+            Iner::NesreIV => 85,
             Iner::Pet => 1,
             Iner::PetI => 3,
             Iner::PetII => 22,
@@ -99,29 +99,29 @@ impl Technique {
         match self {
             // 将一份 <火焰伊纳> 刻印为 2 份<火焰伊纳 I>
             Technique::ExtractI => {
-                let input = data.iner(Iner::Nerse);
-                *data.iner_mut(Iner::Nerse) = 0.0;
-                *data.iner_mut(Iner::NerseI) += input * 2.0;
+                let input = data.iner(Iner::Nesre);
+                *data.iner_mut(Iner::Nesre) = 0.0;
+                *data.iner_mut(Iner::NesreI) += input * 2.0;
             }
             // 将一份 <火焰伊纳 I> 刻印为 2 份<火焰伊纳 II>
             Technique::ExtractII => {
-                let input = data.iner(Iner::NerseI);
-                *data.iner_mut(Iner::NerseI) = 0.0;
-                *data.iner_mut(Iner::NerseII) += input * 2.0;
+                let input = data.iner(Iner::NesreI);
+                *data.iner_mut(Iner::NesreI) = 0.0;
+                *data.iner_mut(Iner::NesreII) += input * 2.0;
             }
             // 将一份 <火焰伊纳 II> 刻印为 2.4 份<火焰伊纳 III>
             // 向上取整
             Technique::ExtractIII => {
-                let input = data.iner(Iner::NerseII);
-                *data.iner_mut(Iner::NerseII) = 0.0;
-                *data.iner_mut(Iner::NerseIII) += input * 2.4;
+                let input = data.iner(Iner::NesreII);
+                *data.iner_mut(Iner::NesreII) = 0.0;
+                *data.iner_mut(Iner::NesreIII) += input * 2.4;
             }
             // 将一份 <火焰伊纳 III> 刻印为 1 份<火焰伊纳 IV>
             // 每有一个空置操作台，获得5000额外评价分数
             Technique::ExtractIV => {
-                let input = data.iner(Iner::NerseIII);
-                *data.iner_mut(Iner::NerseIII) = 0.0;
-                *data.iner_mut(Iner::NerseIV) += input;
+                let input = data.iner(Iner::NesreIII);
+                *data.iner_mut(Iner::NesreIII) = 0.0;
+                *data.iner_mut(Iner::NesreIV) += input;
                 data.extra_score += 5000 * data.empty_boards;
             }
             // 将 <草叶伊纳> 全部刻印为 <草叶伊纳 I>
@@ -183,13 +183,13 @@ impl Technique {
             // 本工艺生效前，将已有 <天空伊纳 II> 和 <火焰伊纳 III> 数量均分
             // 若刻印产出只有1种宝石，额外获得 <天空伊纳 III> 数量 100 倍的评价分数
             Technique::MingleIII => {
-                let nerse = data.iner(Iner::NerseIII);
+                let nesre = data.iner(Iner::NesreIII);
                 let pet = data.iner(Iner::PetII);
-                if pet != 0.0 && nerse != 0.0 {
+                if pet != 0.0 && nesre != 0.0 {
                     // 数量均分，故最终会完全消耗，不会有剩余部分
-                    let sum = nerse + pet;
+                    let sum = nesre + pet;
                     *data.iner_mut(Iner::PetII) = 0.0;
-                    *data.iner_mut(Iner::NerseIII) = 0.0;
+                    *data.iner_mut(Iner::NesreIII) = 0.0;
                     *data.iner_mut(Iner::PetIII) += sum / 2.0;
                     data.extra_score += 100 * data.iner(Iner::PetIII).ceil() as usize;
                 }
@@ -246,11 +246,11 @@ pub struct GameData {
 }
 
 impl GameData {
-    pub fn new(nerse: usize, pet: usize, gabe: usize, shay: usize, empty_boards: usize) -> Self {
+    pub fn new(nesre: usize, pet: usize, gabe: usize, shay: usize, empty_boards: usize) -> Self {
         Self {
             extra_score: 0,
             iner: [
-                (Iner::Nerse, nerse),
+                (Iner::Nesre, nesre),
                 (Iner::Pet, pet),
                 (Iner::Gabe, gabe),
                 (Iner::Shay, shay),
@@ -326,13 +326,14 @@ impl Game {
 pub struct Simulation {
     pub available_techniques: Vec<Technique>,
     pub board_size: usize,
-    pub initial_nerse: usize,
+    pub initial_nesre: usize,
     pub initial_pet: usize,
     pub initial_gabe: usize,
     pub initial_shay: usize,
 }
 
 impl Simulation {
+    #[deprecated]
     pub fn find_best_v1(&self) -> Game {
         use itertools::*;
         let tech_amount = self.available_techniques.len();
@@ -374,7 +375,7 @@ impl Simulation {
                     });
                     let technique = permutation[i..].iter().map(|&&t| t).collect_vec();
                     let data = GameData::new(
-                        self.initial_nerse,
+                        self.initial_nesre,
                         self.initial_pet,
                         self.initial_gabe,
                         self.initial_shay,
@@ -404,10 +405,9 @@ impl Simulation {
         let tech_amount = self.available_techniques.len();
         let best_game: Mutex<Option<Game>> = Mutex::new(None);
         let best_score: Mutex<Option<usize>> = Mutex::new(None);
-        let total_iterations: u128 = (tech_amount as u128).factorial();
-        let iters = Arc::new(RwLock::new(0u128));
-        let iters1 = Arc::clone(&iters);
-        let handle = printer(iters1, total_iterations);
+        let total: u128 = (tech_amount as u128).factorial();
+        let progress = Arc::new(RwLock::new((0u128, 0u128)));
+        let handle = printer(progress.clone(), total);
         self.available_techniques
             .iter()
             .permutations(tech_amount)
@@ -428,7 +428,7 @@ impl Simulation {
                     ];
                     technique.append(&mut permutation[i..].iter().map(|&&t| t).collect_vec());
                     let data = GameData::new(
-                        self.initial_nerse,
+                        self.initial_nesre,
                         self.initial_pet,
                         self.initial_gabe,
                         self.initial_shay,
@@ -446,7 +446,9 @@ impl Simulation {
                         *best_score.lock().unwrap() = Some(score);
                     }
                 }
-                *iters.write().unwrap() += 1 as u128;
+                let mut r = progress.write().unwrap();
+                r.0 += 1;
+                r.1 += (s+1) as u128;
             });
         handle.join().unwrap();
         let game = best_game.lock().unwrap().clone();
@@ -454,23 +456,26 @@ impl Simulation {
     }
 }
 
-pub fn printer(iters: Arc<RwLock<u128>>, total_iterations: u128) -> thread::JoinHandle<()> {
+pub fn printer(
+    progress: Arc<RwLock<(u128, u128)>>,
+    total_iterations: u128,
+) -> thread::JoinHandle<()> {
     let handle = thread::spawn(move || {
-        let mut old = 0;
+        let mut old_iters = 0;
         loop {
-            let iters = iters.read().unwrap().to_owned();
+            let (progress, iters) = progress.read().unwrap().to_owned();
             println!(
-                "[{:.2}%]: {} / {}, {}M iterations per sec",
-                iters as f64 / total_iterations as f64 * 100.0,
-                iters,
+                "[{:06.2}%]: {:07} of {:07}, {:.2}k iter/s",
+                progress as f64 / total_iterations as f64 * 100.0,
+                progress,
                 total_iterations,
-                (iters - old) as f64 / 1_000_000.0
+                (iters - old_iters) as f64 / 1_000.0
             );
-            thread::sleep(Duration::from_secs(1));
-            if iters >= total_iterations {
+            old_iters = iters;
+            if progress >= total_iterations {
                 break;
             }
-            old = iters;
+            thread::sleep(Duration::from_secs(1));
         }
     });
     handle

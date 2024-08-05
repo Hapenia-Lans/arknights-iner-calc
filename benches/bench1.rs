@@ -26,7 +26,7 @@ pub fn criterion_benchmark(c: &mut Criterion) {
                     Technique::CrystalIII,
                 ],
                 board_size: 6,
-                initial_nerse: 19,
+                initial_nesre: 19,
                 initial_pet: 32,
                 initial_gabe: 20,
                 initial_shay: 29,
