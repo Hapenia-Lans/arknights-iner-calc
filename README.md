@@ -12,7 +12,7 @@ cargo install iner-calc
 
 即可安装。
 
-## 使用制品
+### 使用制品
 
 或者可以下载现成的制品使用（仅限windows x64）
 
