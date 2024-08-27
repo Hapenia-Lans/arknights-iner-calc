@@ -396,13 +396,35 @@ impl Simulation {
     }
 
     pub fn find_best_v2(&self) -> Game {
-        use itertools::*;
         let tech_amount = self.available_techniques.len();
         let best_game: Mutex<Option<Game>> = Mutex::new(None);
         let best_score: Mutex<Option<usize>> = Mutex::new(None);
         let total: u128 = (tech_amount as u128).factorial();
         let progress = Arc::new(RwLock::new((0u128, 0u128)));
         let handle = printer(progress.clone(), total);
+        self.find_best_inner(tech_amount, best_score, &best_game, Some(progress));
+        handle.join().unwrap();
+        let game = best_game.lock().unwrap().clone();
+        game.unwrap()
+    }
+
+    pub fn find_best_v2_scilenced(&self) -> Game {
+        let tech_amount = self.available_techniques.len();
+        let best_game: Mutex<Option<Game>> = Mutex::new(None);
+        let best_score: Mutex<Option<usize>> = Mutex::new(None);
+        self.find_best_inner(tech_amount, best_score, &best_game, None);
+        let game = best_game.lock().unwrap().clone();
+        game.unwrap()
+    }
+
+    fn find_best_inner(
+        &self,
+        tech_amount: usize,
+        best_score: Mutex<Option<usize>>,
+        best_game: &Mutex<Option<Game>>,
+        progress: Option<Arc<RwLock<(u128, u128)>>>,
+    ) {
+        use itertools::*;
         self.available_techniques
             .iter()
             .permutations(tech_amount)
@@ -441,13 +463,12 @@ impl Simulation {
                         *best_score.lock().unwrap() = Some(score);
                     }
                 }
-                let mut r = progress.write().unwrap();
-                r.0 += 1;
-                r.1 += (s+1) as u128;
+                if let Some(r) = &progress {
+                    let mut r = r.write().unwrap();
+                    r.0 += 1;
+                    r.1 += (s + 1) as u128;
+                }
             });
-        handle.join().unwrap();
-        let game = best_game.lock().unwrap().clone();
-        game.unwrap()
     }
 }
 

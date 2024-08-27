@@ -7,6 +7,8 @@ description = "A caculator of Arknights 2024 summer carnival's *Sargon Museum*."
 repository = "https://github.com/Hapenia-Lans/arknights-iner-calc"
 readme = "README.md"
 
+
+
 [dependencies]
 clap = { version = "4.5.13", features = ["derive"] }
 factorial = "0.4.0"
