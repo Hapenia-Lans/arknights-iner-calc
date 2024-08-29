@@ -1,4 +1,5 @@
 use factorial::Factorial;
+use indicatif::{ParallelProgressIterator, ProgressStyle};
 use rayon::iter::{ParallelBridge, ParallelIterator};
 use std::sync::{Arc, Mutex, RwLock};
 use std::thread;
@@ -399,11 +400,7 @@ impl Simulation {
         let tech_amount = self.available_techniques.len();
         let best_game: Mutex<Option<Game>> = Mutex::new(None);
         let best_score: Mutex<Option<usize>> = Mutex::new(None);
-        let total: u128 = (tech_amount as u128).factorial();
-        let progress = Arc::new(RwLock::new((0u128, 0u128)));
-        let handle = printer(progress.clone(), total);
-        self.find_best_inner(tech_amount, best_score, &best_game, Some(progress));
-        handle.join().unwrap();
+        self.find_best_inner(tech_amount, best_score, &best_game);
         let game = best_game.lock().unwrap().clone();
         game.unwrap()
     }
@@ -412,7 +409,7 @@ impl Simulation {
         let tech_amount = self.available_techniques.len();
         let best_game: Mutex<Option<Game>> = Mutex::new(None);
         let best_score: Mutex<Option<usize>> = Mutex::new(None);
-        self.find_best_inner(tech_amount, best_score, &best_game, None);
+        self.find_best_inner(tech_amount, best_score, &best_game);
         let game = best_game.lock().unwrap().clone();
         game.unwrap()
     }
@@ -422,13 +419,19 @@ impl Simulation {
         tech_amount: usize,
         best_score: Mutex<Option<usize>>,
         best_game: &Mutex<Option<Game>>,
-        progress: Option<Arc<RwLock<(u128, u128)>>>,
     ) {
         use itertools::*;
         self.available_techniques
             .iter()
             .permutations(tech_amount)
             .par_bridge()
+            .progress_count(3628800)
+            .with_style(
+                ProgressStyle::with_template(
+                    "[{elapsed_precise}] [{bar:40}] {pos:>7}/{len:7} {msg}",
+                )
+                .unwrap().progress_chars("=> "),
+            )
             .for_each(|permutation| {
                 let s = usize::min(tech_amount, self.board_size);
                 for i in 0..=s {
@@ -462,11 +465,6 @@ impl Simulation {
                         *best_game.lock().unwrap() = Some(rem);
                         *best_score.lock().unwrap() = Some(score);
                     }
-                }
-                if let Some(r) = &progress {
-                    let mut r = r.write().unwrap();
-                    r.0 += 1;
-                    r.1 += (s + 1) as u128;
                 }
             });
     }

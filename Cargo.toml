@@ -1,6 +1,6 @@
 [package]
 name = "iner-calc"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 license = "MIT"
 description = "A caculator of Arknights 2024 summer carnival's *Sargon Museum*."
@@ -12,6 +12,7 @@ readme = "README.md"
 [dependencies]
 clap = { version = "4.5.13", features = ["derive"] }
 factorial = "0.4.0"
+indicatif = { version = "0.17.8", features = ["rayon"] }
 itertools = "0.13.0"
 rayon = "1.10.0"
 
